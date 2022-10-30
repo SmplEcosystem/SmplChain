@@ -1,0 +1,14 @@
+syntax = "proto3";
+package smplchain.smplusdse;
+
+import "gogoproto/gogo.proto";
+import "smplchain/smplusdse/params.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "SmplChain/x/smplusdse/types";
+
+// GenesisState defines the smplusdse module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  // this line is used by starport scaffolding # genesis/proto/state
+}

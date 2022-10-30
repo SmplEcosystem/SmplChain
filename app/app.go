@@ -107,6 +107,9 @@ import (
 	smplchainmodule "SmplChain/x/smplchain"
 	smplchainmodulekeeper "SmplChain/x/smplchain/keeper"
 	smplchainmoduletypes "SmplChain/x/smplchain/types"
+	smplusdsemodule "SmplChain/x/smplusdse"
+	smplusdsemodulekeeper "SmplChain/x/smplusdse/keeper"
+	smplusdsemoduletypes "SmplChain/x/smplusdse/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	appparams "SmplChain/app/params"
@@ -166,19 +169,21 @@ var (
 		ica.AppModuleBasic{},
 		vesting.AppModuleBasic{},
 		smplchainmodule.AppModuleBasic{},
+		smplusdsemodule.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
 	// module account permissions
 	maccPerms = map[string][]string{
-		authtypes.FeeCollectorName:     nil,
-		distrtypes.ModuleName:          nil,
-		icatypes.ModuleName:            nil,
-		minttypes.ModuleName:           {authtypes.Minter},
-		stakingtypes.BondedPoolName:    {authtypes.Burner, authtypes.Staking},
-		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
-		govtypes.ModuleName:            {authtypes.Burner},
-		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
+		authtypes.FeeCollectorName:      nil,
+		distrtypes.ModuleName:           nil,
+		icatypes.ModuleName:             nil,
+		minttypes.ModuleName:            {authtypes.Minter},
+		stakingtypes.BondedPoolName:     {authtypes.Burner, authtypes.Staking},
+		stakingtypes.NotBondedPoolName:  {authtypes.Burner, authtypes.Staking},
+		govtypes.ModuleName:             {authtypes.Burner},
+		ibctransfertypes.ModuleName:     {authtypes.Minter, authtypes.Burner},
+		smplusdsemoduletypes.ModuleName: {authtypes.Minter, authtypes.Burner, authtypes.Staking},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
@@ -240,6 +245,8 @@ type App struct {
 	ScopedICAHostKeeper  capabilitykeeper.ScopedKeeper
 
 	SmplchainKeeper smplchainmodulekeeper.Keeper
+
+	SmplusdseKeeper smplusdsemodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// mm is the module manager
@@ -285,6 +292,7 @@ func New(
 		ibctransfertypes.StoreKey, icahosttypes.StoreKey, capabilitytypes.StoreKey, group.StoreKey,
 		icacontrollertypes.StoreKey,
 		smplchainmoduletypes.StoreKey,
+		smplusdsemoduletypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -510,6 +518,16 @@ func New(
 	)
 	smplchainModule := smplchainmodule.NewAppModule(appCodec, app.SmplchainKeeper, app.AccountKeeper, app.BankKeeper)
 
+	app.SmplusdseKeeper = *smplusdsemodulekeeper.NewKeeper(
+		appCodec,
+		keys[smplusdsemoduletypes.StoreKey],
+		keys[smplusdsemoduletypes.MemStoreKey],
+		app.GetSubspace(smplusdsemoduletypes.ModuleName),
+
+		app.BankKeeper,
+	)
+	smplusdseModule := smplusdsemodule.NewAppModule(appCodec, app.SmplusdseKeeper, app.AccountKeeper, app.BankKeeper)
+
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
 	// Sealing prevents other modules from creating scoped sub-keepers
@@ -556,6 +574,7 @@ func New(
 		transferModule,
 		icaModule,
 		smplchainModule,
+		smplusdseModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 	)
 
@@ -586,6 +605,7 @@ func New(
 		paramstypes.ModuleName,
 		vestingtypes.ModuleName,
 		smplchainmoduletypes.ModuleName,
+		smplusdsemoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
@@ -611,6 +631,7 @@ func New(
 		upgradetypes.ModuleName,
 		vestingtypes.ModuleName,
 		smplchainmoduletypes.ModuleName,
+		smplusdsemoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
@@ -641,6 +662,7 @@ func New(
 		upgradetypes.ModuleName,
 		vestingtypes.ModuleName,
 		smplchainmoduletypes.ModuleName,
+		smplusdsemoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	)
 
@@ -671,6 +693,7 @@ func New(
 		ibc.NewAppModule(app.IBCKeeper),
 		transferModule,
 		smplchainModule,
+		smplusdseModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 	)
 	app.sm.RegisterStoreDecoders()
@@ -870,6 +893,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(icacontrollertypes.SubModuleName)
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(smplchainmoduletypes.ModuleName)
+	paramsKeeper.Subspace(smplusdsemoduletypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper

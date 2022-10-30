@@ -1,10 +1,12 @@
 // THIS FILE IS GENERATED AUTOMATICALLY. DO NOT MODIFY.
 
 import SmplchainSmplchain from './smplchain.smplchain'
+import SmplchainSmplusdse from './smplchain.smplusdse'
 
 
 export default { 
   SmplchainSmplchain: load(SmplchainSmplchain, 'smplchain.smplchain'),
+  SmplchainSmplusdse: load(SmplchainSmplusdse, 'smplchain.smplusdse'),
   
 }
 
