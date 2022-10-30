@@ -7,7 +7,17 @@ option go_package = "SmplChain/x/roles/types";
 
 // Msg defines the Msg service.
 service Msg {
-    // this line is used by starport scaffolding # proto/tx/rpc
+      rpc Add(MsgAdd) returns (MsgAddResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgAdd {
+  string creator = 1;
+  string rolename = 2;
+  string address = 3;
+}
+
+message MsgAddResponse {
 }
 
 // this line is used by starport scaffolding # proto/tx/message
