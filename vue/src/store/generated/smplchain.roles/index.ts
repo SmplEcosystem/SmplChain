@@ -128,19 +128,6 @@ export default {
 		},
 		
 		
-		async sendMsgAdd({ rootGetters }, { value, fee = [], memo = '' }) {
-			try {
-				const client=await initClient(rootGetters)
-				const result = await client.SmplchainRoles.tx.sendMsgAdd({ value, fee: {amount: fee, gas: "200000"}, memo })
-				return result
-			} catch (e) {
-				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgAdd:Init Could not initialize signing client. Wallet is required.')
-				}else{
-					throw new Error('TxClient:MsgAdd:Send Could not broadcast Tx: '+ e.message)
-				}
-			}
-		},
 		async sendMsgRemove({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const client=await initClient(rootGetters)
@@ -154,20 +141,20 @@ export default {
 				}
 			}
 		},
-		
-		async MsgAdd({ rootGetters }, { value }) {
+		async sendMsgAdd({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
-				const client=initClient(rootGetters)
-				const msg = await client.SmplchainRoles.tx.msgAdd({value})
-				return msg
+				const client=await initClient(rootGetters)
+				const result = await client.SmplchainRoles.tx.sendMsgAdd({ value, fee: {amount: fee, gas: "200000"}, memo })
+				return result
 			} catch (e) {
 				if (e == MissingWalletError) {
 					throw new Error('TxClient:MsgAdd:Init Could not initialize signing client. Wallet is required.')
-				} else{
-					throw new Error('TxClient:MsgAdd:Create Could not create message: ' + e.message)
+				}else{
+					throw new Error('TxClient:MsgAdd:Send Could not broadcast Tx: '+ e.message)
 				}
 			}
 		},
+		
 		async MsgRemove({ rootGetters }, { value }) {
 			try {
 				const client=initClient(rootGetters)
@@ -178,6 +165,19 @@ export default {
 					throw new Error('TxClient:MsgRemove:Init Could not initialize signing client. Wallet is required.')
 				} else{
 					throw new Error('TxClient:MsgRemove:Create Could not create message: ' + e.message)
+				}
+			}
+		},
+		async MsgAdd({ rootGetters }, { value }) {
+			try {
+				const client=initClient(rootGetters)
+				const msg = await client.SmplchainRoles.tx.msgAdd({value})
+				return msg
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgAdd:Init Could not initialize signing client. Wallet is required.')
+				} else{
+					throw new Error('TxClient:MsgAdd:Create Could not create message: ' + e.message)
 				}
 			}
 		},
