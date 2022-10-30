@@ -113,6 +113,7 @@ import (
 	smplusdsemodule "SmplChain/x/smplusdse"
 	smplusdsemodulekeeper "SmplChain/x/smplusdse/keeper"
 	smplusdsemoduletypes "SmplChain/x/smplusdse/types"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	appparams "SmplChain/app/params"
@@ -120,7 +121,7 @@ import (
 )
 
 const (
-	AccountAddressPrefix = "cosmos"
+	AccountAddressPrefix = "smpl"
 	Name                 = "SmplChain"
 )
 
