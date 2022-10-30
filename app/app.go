@@ -104,6 +104,9 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	dbm "github.com/tendermint/tm-db"
 
+	rolesmodule "SmplChain/x/roles"
+	rolesmodulekeeper "SmplChain/x/roles/keeper"
+	rolesmoduletypes "SmplChain/x/roles/types"
 	smplchainmodule "SmplChain/x/smplchain"
 	smplchainmodulekeeper "SmplChain/x/smplchain/keeper"
 	smplchainmoduletypes "SmplChain/x/smplchain/types"
@@ -170,6 +173,7 @@ var (
 		vesting.AppModuleBasic{},
 		smplchainmodule.AppModuleBasic{},
 		smplusdsemodule.AppModuleBasic{},
+		rolesmodule.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
@@ -247,6 +251,8 @@ type App struct {
 	SmplchainKeeper smplchainmodulekeeper.Keeper
 
 	SmplusdseKeeper smplusdsemodulekeeper.Keeper
+
+	RolesKeeper rolesmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// mm is the module manager
@@ -293,6 +299,7 @@ func New(
 		icacontrollertypes.StoreKey,
 		smplchainmoduletypes.StoreKey,
 		smplusdsemoduletypes.StoreKey,
+		rolesmoduletypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -528,6 +535,14 @@ func New(
 	)
 	smplusdseModule := smplusdsemodule.NewAppModule(appCodec, app.SmplusdseKeeper, app.AccountKeeper, app.BankKeeper)
 
+	app.RolesKeeper = *rolesmodulekeeper.NewKeeper(
+		appCodec,
+		keys[rolesmoduletypes.StoreKey],
+		keys[rolesmoduletypes.MemStoreKey],
+		app.GetSubspace(rolesmoduletypes.ModuleName),
+	)
+	rolesModule := rolesmodule.NewAppModule(appCodec, app.RolesKeeper, app.AccountKeeper, app.BankKeeper)
+
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
 	// Sealing prevents other modules from creating scoped sub-keepers
@@ -575,6 +590,7 @@ func New(
 		icaModule,
 		smplchainModule,
 		smplusdseModule,
+		rolesModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 	)
 
@@ -606,6 +622,7 @@ func New(
 		vestingtypes.ModuleName,
 		smplchainmoduletypes.ModuleName,
 		smplusdsemoduletypes.ModuleName,
+		rolesmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
@@ -632,6 +649,7 @@ func New(
 		vestingtypes.ModuleName,
 		smplchainmoduletypes.ModuleName,
 		smplusdsemoduletypes.ModuleName,
+		rolesmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
@@ -663,6 +681,7 @@ func New(
 		vestingtypes.ModuleName,
 		smplchainmoduletypes.ModuleName,
 		smplusdsemoduletypes.ModuleName,
+		rolesmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	)
 
@@ -694,6 +713,7 @@ func New(
 		transferModule,
 		smplchainModule,
 		smplusdseModule,
+		rolesModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 	)
 	app.sm.RegisterStoreDecoders()
@@ -894,6 +914,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(smplchainmoduletypes.ModuleName)
 	paramsKeeper.Subspace(smplusdsemoduletypes.ModuleName)
+	paramsKeeper.Subspace(rolesmoduletypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper
