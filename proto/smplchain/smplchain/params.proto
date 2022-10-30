@@ -1,0 +1,12 @@
+syntax = "proto3";
+package smplchain.smplchain;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "SmplChain/x/smplchain/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+}

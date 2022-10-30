@@ -1,0 +1,14 @@
+syntax = "proto3";
+package smplchain.smplchain;
+
+import "gogoproto/gogo.proto";
+import "smplchain/smplchain/params.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "SmplChain/x/smplchain/types";
+
+// GenesisState defines the smplchain module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  // this line is used by starport scaffolding # genesis/proto/state
+}
