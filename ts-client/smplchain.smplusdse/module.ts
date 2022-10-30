@@ -8,9 +8,10 @@ import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
 import { MsgMint } from "./types/smplchain/smplusdse/tx";
+import { MsgBurn } from "./types/smplchain/smplusdse/tx";
 
 
-export { MsgMint };
+export { MsgMint, MsgBurn };
 
 type sendMsgMintParams = {
   value: MsgMint,
@@ -18,9 +19,19 @@ type sendMsgMintParams = {
   memo?: string
 };
 
+type sendMsgBurnParams = {
+  value: MsgBurn,
+  fee?: StdFee,
+  memo?: string
+};
+
 
 type msgMintParams = {
   value: MsgMint,
+};
+
+type msgBurnParams = {
+  value: MsgBurn,
 };
 
 
@@ -55,12 +66,34 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		async sendMsgBurn({ value, fee, memo }: sendMsgBurnParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgBurn: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgBurn({ value: MsgBurn.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgBurn: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
 		
 		msgMint({ value }: msgMintParams): EncodeObject {
 			try {
 				return { typeUrl: "/smplchain.smplusdse.MsgMint", value: MsgMint.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgMint: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgBurn({ value }: msgBurnParams): EncodeObject {
+			try {
+				return { typeUrl: "/smplchain.smplusdse.MsgBurn", value: MsgBurn.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgBurn: Could not create message: ' + e.message)
 			}
 		},
 		

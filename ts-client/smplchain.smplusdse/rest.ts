@@ -20,6 +20,8 @@ export interface RpcStatus {
   details?: ProtobufAny[];
 }
 
+export type SmplusdseMsgBurnResponse = object;
+
 export type SmplusdseMsgMintResponse = object;
 
 /**

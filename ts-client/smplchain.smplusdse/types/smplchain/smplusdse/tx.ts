@@ -11,6 +11,14 @@ export interface MsgMint {
 export interface MsgMintResponse {
 }
 
+export interface MsgBurn {
+  creator: string;
+  amount: string;
+}
+
+export interface MsgBurnResponse {
+}
+
 function createBaseMsgMint(): MsgMint {
   return { creator: "", amount: "" };
 }
@@ -108,10 +116,108 @@ export const MsgMintResponse = {
   },
 };
 
+function createBaseMsgBurn(): MsgBurn {
+  return { creator: "", amount: "" };
+}
+
+export const MsgBurn = {
+  encode(message: MsgBurn, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.amount !== "") {
+      writer.uint32(18).string(message.amount);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgBurn {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgBurn();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.amount = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgBurn {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      amount: isSet(object.amount) ? String(object.amount) : "",
+    };
+  },
+
+  toJSON(message: MsgBurn): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.amount !== undefined && (obj.amount = message.amount);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgBurn>, I>>(object: I): MsgBurn {
+    const message = createBaseMsgBurn();
+    message.creator = object.creator ?? "";
+    message.amount = object.amount ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgBurnResponse(): MsgBurnResponse {
+  return {};
+}
+
+export const MsgBurnResponse = {
+  encode(_: MsgBurnResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgBurnResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgBurnResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgBurnResponse {
+    return {};
+  },
+
+  toJSON(_: MsgBurnResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgBurnResponse>, I>>(_: I): MsgBurnResponse {
+    const message = createBaseMsgBurnResponse();
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   Mint(request: MsgMint): Promise<MsgMintResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  Burn(request: MsgBurn): Promise<MsgBurnResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -119,11 +225,18 @@ export class MsgClientImpl implements Msg {
   constructor(rpc: Rpc) {
     this.rpc = rpc;
     this.Mint = this.Mint.bind(this);
+    this.Burn = this.Burn.bind(this);
   }
   Mint(request: MsgMint): Promise<MsgMintResponse> {
     const data = MsgMint.encode(request).finish();
     const promise = this.rpc.request("smplchain.smplusdse.Msg", "Mint", data);
     return promise.then((data) => MsgMintResponse.decode(new _m0.Reader(data)));
+  }
+
+  Burn(request: MsgBurn): Promise<MsgBurnResponse> {
+    const data = MsgBurn.encode(request).finish();
+    const promise = this.rpc.request("smplchain.smplusdse.Msg", "Burn", data);
+    return promise.then((data) => MsgBurnResponse.decode(new _m0.Reader(data)));
   }
 }
 
