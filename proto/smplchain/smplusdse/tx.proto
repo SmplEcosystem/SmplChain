@@ -7,7 +7,16 @@ option go_package = "SmplChain/x/smplusdse/types";
 
 // Msg defines the Msg service.
 service Msg {
-    // this line is used by starport scaffolding # proto/tx/rpc
+      rpc Mint(MsgMint) returns (MsgMintResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgMint {
+  string creator = 1;
+  string amount = 2;
+}
+
+message MsgMintResponse {
 }
 
 // this line is used by starport scaffolding # proto/tx/message
