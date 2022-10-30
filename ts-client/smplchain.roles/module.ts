@@ -8,9 +8,10 @@ import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
 import { MsgAdd } from "./types/smplchain/roles/tx";
+import { MsgRemove } from "./types/smplchain/roles/tx";
 
 
-export { MsgAdd };
+export { MsgAdd, MsgRemove };
 
 type sendMsgAddParams = {
   value: MsgAdd,
@@ -18,9 +19,19 @@ type sendMsgAddParams = {
   memo?: string
 };
 
+type sendMsgRemoveParams = {
+  value: MsgRemove,
+  fee?: StdFee,
+  memo?: string
+};
+
 
 type msgAddParams = {
   value: MsgAdd,
+};
+
+type msgRemoveParams = {
+  value: MsgRemove,
 };
 
 
@@ -55,12 +66,34 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		async sendMsgRemove({ value, fee, memo }: sendMsgRemoveParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgRemove: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgRemove({ value: MsgRemove.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgRemove: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
 		
 		msgAdd({ value }: msgAddParams): EncodeObject {
 			try {
 				return { typeUrl: "/smplchain.roles.MsgAdd", value: MsgAdd.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgAdd: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgRemove({ value }: msgRemoveParams): EncodeObject {
+			try {
+				return { typeUrl: "/smplchain.roles.MsgRemove", value: MsgRemove.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgRemove: Could not create message: ' + e.message)
 			}
 		},
 		

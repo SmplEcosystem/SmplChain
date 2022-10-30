@@ -141,6 +141,19 @@ export default {
 				}
 			}
 		},
+		async sendMsgRemove({ rootGetters }, { value, fee = [], memo = '' }) {
+			try {
+				const client=await initClient(rootGetters)
+				const result = await client.SmplchainRoles.tx.sendMsgRemove({ value, fee: {amount: fee, gas: "200000"}, memo })
+				return result
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgRemove:Init Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new Error('TxClient:MsgRemove:Send Could not broadcast Tx: '+ e.message)
+				}
+			}
+		},
 		
 		async MsgAdd({ rootGetters }, { value }) {
 			try {
@@ -152,6 +165,19 @@ export default {
 					throw new Error('TxClient:MsgAdd:Init Could not initialize signing client. Wallet is required.')
 				} else{
 					throw new Error('TxClient:MsgAdd:Create Could not create message: ' + e.message)
+				}
+			}
+		},
+		async MsgRemove({ rootGetters }, { value }) {
+			try {
+				const client=initClient(rootGetters)
+				const msg = await client.SmplchainRoles.tx.msgRemove({value})
+				return msg
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgRemove:Init Could not initialize signing client. Wallet is required.')
+				} else{
+					throw new Error('TxClient:MsgRemove:Create Could not create message: ' + e.message)
 				}
 			}
 		},

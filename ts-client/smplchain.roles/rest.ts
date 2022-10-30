@@ -15,6 +15,8 @@ export interface ProtobufAny {
 
 export type RolesMsgAddResponse = object;
 
+export type RolesMsgRemoveResponse = object;
+
 /**
  * Params defines the parameters for the module.
  */

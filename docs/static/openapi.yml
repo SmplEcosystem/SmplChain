@@ -74860,6 +74860,8 @@ definitions:
       the connection handshake.
   smplchain.roles.MsgAddResponse:
     type: object
+  smplchain.roles.MsgRemoveResponse:
+    type: object
   smplchain.roles.Params:
     type: object
     description: Params defines the parameters for the module.
