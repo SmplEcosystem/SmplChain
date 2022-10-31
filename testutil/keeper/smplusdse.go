@@ -5,6 +5,7 @@ import (
 
 	"SmplChain/x/smplusdse/keeper"
 	"SmplChain/x/smplusdse/types"
+
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/store"
@@ -41,6 +42,7 @@ func SmplusdseKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 		storeKey,
 		memStoreKey,
 		paramsSubspace,
+		nil,
 		nil,
 	)
 

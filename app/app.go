@@ -526,6 +526,14 @@ func New(
 	)
 	smplchainModule := smplchainmodule.NewAppModule(appCodec, app.SmplchainKeeper, app.AccountKeeper, app.BankKeeper)
 
+	// this should be above  module whoever is using roles
+	app.RolesKeeper = *rolesmodulekeeper.NewKeeper(
+		appCodec,
+		keys[rolesmoduletypes.StoreKey],
+		keys[rolesmoduletypes.MemStoreKey],
+		app.GetSubspace(rolesmoduletypes.ModuleName),
+	)
+
 	app.SmplusdseKeeper = *smplusdsemodulekeeper.NewKeeper(
 		appCodec,
 		keys[smplusdsemoduletypes.StoreKey],
@@ -533,15 +541,10 @@ func New(
 		app.GetSubspace(smplusdsemoduletypes.ModuleName),
 
 		app.BankKeeper,
+		app.RolesKeeper,
 	)
 	smplusdseModule := smplusdsemodule.NewAppModule(appCodec, app.SmplusdseKeeper, app.AccountKeeper, app.BankKeeper)
 
-	app.RolesKeeper = *rolesmodulekeeper.NewKeeper(
-		appCodec,
-		keys[rolesmoduletypes.StoreKey],
-		keys[rolesmoduletypes.MemStoreKey],
-		app.GetSubspace(rolesmoduletypes.ModuleName),
-	)
 	rolesModule := rolesmodule.NewAppModule(appCodec, app.RolesKeeper, app.AccountKeeper, app.BankKeeper)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
