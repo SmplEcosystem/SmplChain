@@ -6,18 +6,21 @@ export const protobufPackage = "smplchain.roles";
 
 /** GenesisState defines the roles module's genesis state. */
 export interface GenesisState {
-  /** this line is used by starport scaffolding # genesis/proto/state */
   params: Params | undefined;
+  adminaccount: string;
 }
 
 function createBaseGenesisState(): GenesisState {
-  return { params: undefined };
+  return { params: undefined, adminaccount: "" };
 }
 
 export const GenesisState = {
   encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.adminaccount !== "") {
+      writer.uint32(18).string(message.adminaccount);
     }
     return writer;
   },
@@ -32,6 +35,9 @@ export const GenesisState = {
         case 1:
           message.params = Params.decode(reader, reader.uint32());
           break;
+        case 2:
+          message.adminaccount = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -41,12 +47,16 @@ export const GenesisState = {
   },
 
   fromJSON(object: any): GenesisState {
-    return { params: isSet(object.params) ? Params.fromJSON(object.params) : undefined };
+    return {
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
+      adminaccount: isSet(object.adminaccount) ? String(object.adminaccount) : "",
+    };
   },
 
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    message.adminaccount !== undefined && (obj.adminaccount = message.adminaccount);
     return obj;
   },
 
@@ -55,6 +65,7 @@ export const GenesisState = {
     message.params = (object.params !== undefined && object.params !== null)
       ? Params.fromPartial(object.params)
       : undefined;
+    message.adminaccount = object.adminaccount ?? "";
     return message;
   },
 };

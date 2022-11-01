@@ -31,6 +31,8 @@ genesis:
     mint:
       params:
         mint_denom: smpl
+    roles:
+      adminaccount: "smpl1q28v96p6lhyac2ghjlyylsl4290tl722x9kmtg"
 faucet:
   name: alice
   coins:

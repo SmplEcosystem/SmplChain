@@ -6,6 +6,8 @@ import (
 
 	"SmplChain/x/roles/types"
 
+	"github.com/cosmos/cosmos-sdk/store/prefix"
+
 	"github.com/cosmos/cosmos-sdk/codec"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -72,19 +74,36 @@ func (k Keeper) IsAdmin(ctx sdk.Context, senderModule string, account sdk.AccAdd
 	var isRoleExist bool
 	isRoleExist = false
 
-	isExist := ctx.KVStore(k.storeKey).Get([]byte(account.String() + "admin"))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(""))
 
-	if len(isExist) > 0 {
-		json.Unmarshal(isExist, &isRoleExist)
+	adminaccount := store.Get([]byte("admin"))
 
+	if account.String() == string(adminaccount) {
+		isRoleExist = true
 	}
 
-	if !isRoleExist {
-		if account.String() == "smpl1q28v96p6lhyac2ghjlyylsl4290tl722x9kmtg" {
-			isRoleExist = true
-		}
+	// if !isRoleExist {
+	// 	if account.String() == k.GetParams(ctx).Adminaccount {
+	// 		isRoleExist = true
+	// 	}
 
-	}
+	// }
 
 	return isRoleExist, nil
+}
+
+func (k Keeper) SetAdminAccount(ctx sdk.Context, account string) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(""))
+	key := []byte("admin")
+	value := []byte(account)
+
+	store.Set(key, value)
+}
+
+func (k Keeper) GetAdminAccount(ctx sdk.Context) string {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(""))
+	key := []byte("admin")
+	value := store.Get(key)
+	return string(value)
+
 }
