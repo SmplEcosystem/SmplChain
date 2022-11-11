@@ -31,6 +31,18 @@ genesis:
     mint:
       params:
         mint_denom: smpl
+    bank:
+      denom_metadata:  
+        - description: "Pegged USD token"
+          name: "usdse"
+          symbol: "usdse"
+          display: "usdse"
+          base: "usdse"
+          denom_units: 
+             - denom: "usdse"
+               exponent: 0
+             - denom: "usdsed"
+               exponent: 2
     roles:
       adminaccount: "smpl1q28v96p6lhyac2ghjlyylsl4290tl722x9kmtg"
 faucet:
