@@ -53,7 +53,7 @@ faucet:
     - 20000smpl
 init:
   app:
-    minimum-gas-prices: "0smpl"
+    minimum-gas-prices: "0smpl,0usdse"
     grpc-web:
       enable-unsafe-cors: false
     api:
