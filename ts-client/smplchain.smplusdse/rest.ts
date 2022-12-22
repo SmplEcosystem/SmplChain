@@ -33,7 +33,7 @@ export type SmplusdseParams = object;
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
 export interface SmplusdseQueryParamsResponse {
-  /** Params defines the parameters for the module. */
+  /** params holds all the parameters of this module. */
   params?: SmplusdseParams;
 }
 

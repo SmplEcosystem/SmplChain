@@ -29,7 +29,7 @@ export type SmplchainParams = object;
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
 export interface SmplchainQueryParamsResponse {
-  /** Params defines the parameters for the module. */
+  /** params holds all the parameters of this module. */
   params?: SmplchainParams;
 }
 

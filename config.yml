@@ -1,17 +1,17 @@
 version: 1
 accounts:
   - name: validator1
-    coins: [ "200000000smpl" ]
+    coins: [ "200000000000000usmpl" ]
     mnemonic: "blossom nominee burst use banana base kite strong lawn autumn tree enact vapor domain media you marble bomb theory heart visit give cereal panic"
   - name: alice
-    coins: [ "200000smpl" ]
+    coins: [ "200000000000usmpl" ]
     mnemonic: "primary off palace rhythm attend human sample exact side domain fantasy attend tent end shadow gallery okay gallery clog announce cry senior citizen spot"
   - name: bob
-    coins: ["10000smpl"]
+    coins: ["10000000000usmpl"]
     mnemonic: "lion fade special man proof bus mansion turn consider earth castle comfort echo axis body pen vehicle glare pig chest member fantasy brush kiwi"
 validators:
   - name: validator1
-    bonded: "10000000smpl"
+    bonded: "10000000000000usmpl"
 client:
   openapi:
     path: "docs/static/openapi.yml"
@@ -24,13 +24,13 @@ genesis:
   app_state:
     staking:
       params:
-        bond_denom: "smpl"
+        bond_denom: "usmpl"
     crisis:
       constant_fee:
-        denom: smpl
+        denom: usmpl
     mint:
       params:
-        mint_denom: smpl
+        mint_denom: usmpl
     bank:
       denom_metadata:  
         - description: "Pegged USD token"
@@ -43,6 +43,18 @@ genesis:
                exponent: 0
              - denom: "usdsed"
                exponent: 2
+        - description: "SMPL token"
+          name: "SMPL"
+          symbol: "smpl"
+          display: "smpl"
+          base: "usmpl"
+          denom_units:
+            - denom: "usmpl"
+              exponent: 0
+            - denom: "msmpl"
+              exponent: 3
+            - denom: "smpl"
+              exponent: 6
     roles:
       adminaccount: "smpl1q28v96p6lhyac2ghjlyylsl4290tl722x9kmtg"
 faucet:
@@ -53,7 +65,7 @@ faucet:
     - 20000smpl
 init:
   app:
-    minimum-gas-prices: "0smpl,0usdse"
+    minimum-gas-prices: "0usmpl,0usdse"
     grpc-web:
       enable-unsafe-cors: false
     api:
