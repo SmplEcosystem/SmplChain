@@ -8,15 +8,21 @@ import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
 import { MsgVoteWeighted } from "./types/cosmos/gov/v1beta1/tx";
+import { MsgVote } from "./types/cosmos/gov/v1beta1/tx";
 import { MsgSubmitProposal } from "./types/cosmos/gov/v1beta1/tx";
 import { MsgDeposit } from "./types/cosmos/gov/v1beta1/tx";
-import { MsgVote } from "./types/cosmos/gov/v1beta1/tx";
 
 
-export { MsgVoteWeighted, MsgSubmitProposal, MsgDeposit, MsgVote };
+export { MsgVoteWeighted, MsgVote, MsgSubmitProposal, MsgDeposit };
 
 type sendMsgVoteWeightedParams = {
   value: MsgVoteWeighted,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgVoteParams = {
+  value: MsgVote,
   fee?: StdFee,
   memo?: string
 };
@@ -33,15 +39,13 @@ type sendMsgDepositParams = {
   memo?: string
 };
 
-type sendMsgVoteParams = {
-  value: MsgVote,
-  fee?: StdFee,
-  memo?: string
-};
-
 
 type msgVoteWeightedParams = {
   value: MsgVoteWeighted,
+};
+
+type msgVoteParams = {
+  value: MsgVote,
 };
 
 type msgSubmitProposalParams = {
@@ -50,10 +54,6 @@ type msgSubmitProposalParams = {
 
 type msgDepositParams = {
   value: MsgDeposit,
-};
-
-type msgVoteParams = {
-  value: MsgVote,
 };
 
 
@@ -88,6 +88,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		async sendMsgVote({ value, fee, memo }: sendMsgVoteParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgVote: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgVote({ value: MsgVote.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgVote: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
 		async sendMsgSubmitProposal({ value, fee, memo }: sendMsgSubmitProposalParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgSubmitProposal: Unable to sign Tx. Signer is not present.')
@@ -116,26 +130,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgVote({ value, fee, memo }: sendMsgVoteParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgVote: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgVote({ value: MsgVote.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgVote: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		
 		msgVoteWeighted({ value }: msgVoteWeightedParams): EncodeObject {
 			try {
 				return { typeUrl: "/cosmos.gov.v1beta1.MsgVoteWeighted", value: MsgVoteWeighted.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgVoteWeighted: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgVote({ value }: msgVoteParams): EncodeObject {
+			try {
+				return { typeUrl: "/cosmos.gov.v1beta1.MsgVote", value: MsgVote.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgVote: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -152,14 +160,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return { typeUrl: "/cosmos.gov.v1beta1.MsgDeposit", value: MsgDeposit.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgDeposit: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgVote({ value }: msgVoteParams): EncodeObject {
-			try {
-				return { typeUrl: "/cosmos.gov.v1beta1.MsgVote", value: MsgVote.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgVote: Could not create message: ' + e.message)
 			}
 		},
 		
