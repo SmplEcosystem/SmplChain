@@ -13,7 +13,7 @@ validators:
   - name: validator1
     bonded: "10000000000000000garden"
     app:
-      minimum-gas-prices: "0garden,0usdse,0usdst"
+      minimum-gas-prices: "0garden,0usdse,0smplst"
       grpc-web:
         enable-unsafe-cors: false
         enable_unsafe_cors: false
@@ -58,14 +58,14 @@ genesis:
     bank:
       denom_metadata:
         - description: "Stable token"
-          name: "usdst"
-          symbol: "usdst"
-          display: "usdst"
-          base: "busdst"
+          name: "smplst"
+          symbol: "smplst"
+          display: "smplst"
+          base: "bsmplst"
           denom_units:
-            - denom: "busdst"
+            - denom: "bsmplst"
               exponent: 0
-            - denom: "usdst"
+            - denom: "smplst"
               exponent: 6
         - description: "Pegged USD token"
           name: "usdse"
