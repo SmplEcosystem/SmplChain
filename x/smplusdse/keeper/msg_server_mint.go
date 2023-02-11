@@ -12,7 +12,7 @@ import (
 func (k msgServer) Mint(goCtx context.Context, msg *types.MsgMint) (*types.MsgMintResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	coin, err := sdk.ParseCoinsNormalized(msg.Amount + "usdse")
+	coin, err := sdk.ParseCoinsNormalized(msg.Amount + "busdse")
 	if err != nil {
 		return nil, err
 	}

@@ -12,6 +12,25 @@ accounts:
 validators:
   - name: validator1
     bonded: "10000000000000000garden"
+    app:
+      minimum-gas-prices: "0garden,0usdse,0usdst"
+      grpc-web:
+        enable-unsafe-cors: false
+        enable_unsafe_cors: false
+      api:
+        enabled-unsafe-cors: false
+        enabled_unsafe_cors: false
+      rpc:
+        cors_allowed_origins: []
+    client:
+      keyring-backend: test
+      chain-id: "cosmos:smpl-chain"
+    config:
+      consensus:
+        create_empty_blocks: false
+      rpc:
+        cors_allowed_origins: []
+
 client:
   openapi:
     path: "docs/static/openapi.yml"
@@ -76,22 +95,10 @@ genesis:
               exponent: 9
     roles:
       adminaccount: "smpl1q28v96p6lhyac2ghjlyylsl4290tl722x9kmtg"
+
 faucet:
   name: alice
   coins:
     - 1000smpl
   coins_max:
     - 20000smpl
-init:
-  app:
-    minimum-gas-prices: "0garden,0usdse,0usdst"
-    grpc-web:
-      enable-unsafe-cors: false
-    api:
-      enabled-unsafe-cors: false
-  client:
-    keyring-backend: test
-    chain-id: "cosmos:smpl-chain"
-  config:
-    consensus:
-      create_empty_blocks: false

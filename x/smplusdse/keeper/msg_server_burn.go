@@ -16,7 +16,8 @@ func (k msgServer) Burn(goCtx context.Context, msg *types.MsgBurn) (*types.MsgBu
 	if err != nil {
 		return nil, err
 	}
-	coin, err := sdk.ParseCoinsNormalized(msg.Amount + "usdse")
+
+	coin, err := sdk.ParseCoinsNormalized(msg.Amount + "busdse")
 	if err != nil {
 		return nil, err
 	}
