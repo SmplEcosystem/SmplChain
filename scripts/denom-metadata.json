@@ -1,0 +1,77 @@
+[
+  {
+    "description": "Stable token",
+    "denom_units": [
+      {
+        "denom": "bsmplst",
+        "exponent": 0,
+        "aliases": []
+      },
+      {
+        "denom": "smplst",
+        "exponent": 6,
+        "aliases": []
+      }
+    ],
+    "base": "bsmplst",
+    "display": "smplst",
+    "name": "smplst",
+    "symbol": "smplst",
+    "uri": "",
+    "uri_hash": ""
+  },
+  {
+    "description": "Pegged USD token",
+    "denom_units": [
+      {
+        "denom": "busdse",
+        "exponent": 0,
+        "aliases": []
+      },
+      {
+        "denom": "usdse",
+        "exponent": 6,
+        "aliases": []
+      }
+    ],
+    "base": "busdse",
+    "display": "usdse",
+    "name": "usdse",
+    "symbol": "usdse",
+    "uri": "",
+    "uri_hash": ""
+  },
+  {
+    "description": "SMPL token",
+    "denom_units": [
+      {
+        "denom": "garden",
+        "exponent": 0,
+        "aliases": [
+          "bsmpl"
+        ]
+      },
+      {
+        "denom": "usmpl",
+        "exponent": 3,
+        "aliases": []
+      },
+      {
+        "denom": "msmpl",
+        "exponent": 6,
+        "aliases": []
+      },
+      {
+        "denom": "smpl",
+        "exponent": 9,
+        "aliases": []
+      }
+    ],
+    "base": "garden",
+    "display": "smpl",
+    "name": "SMPL",
+    "symbol": "smpl",
+    "uri": "",
+    "uri_hash": ""
+  }
+]
