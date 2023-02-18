@@ -5,16 +5,21 @@ if [ -d "$HOME/.SmplChain" ]; then
   exit 1
 fi
 
-#if [ "" == "$1" ]; then
-#  echo "Please pass a node moniker"
-#  exit 1
-#fi
+if [ "" == "$1" ]; then
+  echo "Please pass a node moniker"
+  exit 1
+fi
+
+if [ "" == "$2" ]; then
+  echo "Please pass an admin account"
+  exit 1
+fi
 
 file=smpl-chaind-state.txt
 
 denomMetadata=$(<denom-metadata.json)
 
-SmplChaind init "test"
+SmplChaind init $1
 
 chainName="cosmos:smpl-chain-testing"
 
@@ -33,6 +38,7 @@ jq '.app_state.mint.params.inflation_min = "0"' "$genesisFile" > temp.json && mv
 jq '.app_state.crisis.constant_fee.denom = "garden"' "$genesisFile" > temp.json && mv temp.json "$genesisFile"
 jq '.app_state.staking.params.bond_denom = "garden"' "$genesisFile" > temp.json && mv temp.json "$genesisFile"
 jq '.app_state.gov.deposit_params.min_deposit[0].denom = "garden"' "$genesisFile" > temp.json && mv temp.json "$genesisFile"
+jq ".app_state.roles.adminaccount = \"$2\"" "$genesisFile" > temp.json && mv temp.json "$genesisFile"
 
 jq ".app_state.bank.denom_metadata = $denomMetadata" "$genesisFile" > temp.json && mv temp.json "$genesisFile"
 
