@@ -43,6 +43,11 @@ curl https://get.ignite.com/username/SmplChain@latest! | sudo bash
 ```
 `username/SmplChain` should match the `username` and `repo_name` of the Github repository to which the source code was pushed. Learn more about [the install process](https://github.com/allinbits/starport-installer).
 
+### Helpful commands:
+```SmplChaind tx roles add bank smpl1q28v96p6lhyac2ghjlyylsl4290tl722x9kmtg --from alice```
+```SmplChaind tx smplusdse mint 10000 --from alice```
+```SmplChaind tx bank send smpl1q28v96p6lhyac2ghjlyylsl4290tl722x9kmtg smpl1amjrtwxjtngwgsfun6xgmr9ut8v4v9dh6c0nsd 10usdse```
+
 ## Learn more
 
 - [Ignite CLI](https://ignite.com/cli)

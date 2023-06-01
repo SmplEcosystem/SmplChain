@@ -13,7 +13,7 @@ validators:
   - name: validator1
     bonded: "10000000000000000garden"
     app:
-      minimum-gas-prices: "0garden,0usdse,0smplst"
+      minimum-gas-prices: "10garden,10busdse"
       grpc-web:
         enable-unsafe-cors: false
         enable_unsafe_cors: false

@@ -49,8 +49,8 @@ while read -r i; do
   SmplChaind add-genesis-account "$j" "$r"
 done <$file
 
-cp -a keyring-test "$HOME"/.SmplChain/
+#cp -a keyring-test "$HOME"/.SmplChain/
 
-SmplChaind gentx validator2 100000000000garden
-
-SmplChaind collect-gentxs
+#SmplChaind gentx validator2 100000000000garden
+#
+#SmplChaind collect-gentxs

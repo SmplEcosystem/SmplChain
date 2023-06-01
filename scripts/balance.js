@@ -29,7 +29,7 @@ genesis.app_state.bank.balances.forEach(account => {
 
         coins.push(`${amount}${denom}`);
     })
-    console.log(`${output} ${coins.join(',')}`)
+    console.log(`${coins.join('\t')}`)
     // console.log("address",account.address)
     // console.log("amount",account.coins[0].amount)
 });
