@@ -1,0 +1,106 @@
+version: 1
+accounts:
+  - name: validator1
+    coins: [ "200000000000000000garden" ]
+    mnemonic: "blossom nominee burst use banana base kite strong lawn autumn tree enact vapor domain media you marble bomb theory heart visit give cereal panic"
+  - name: alice
+    coins: [ "200000000000000garden" ]
+    mnemonic: "primary off palace rhythm attend human sample exact side domain fantasy attend tent end shadow gallery okay gallery clog announce cry senior citizen spot"
+  - name: bob
+    coins: ["10000000000000garden"]
+    mnemonic: "lion fade special man proof bus mansion turn consider earth castle comfort echo axis body pen vehicle glare pig chest member fantasy brush kiwi"
+validators:
+  - name: validator1
+    bonded: "10000000000000000garden"
+    app:
+      api:
+        enable
+
+client:
+  openapi:
+    path: "docs/static/openapi.yml"
+  typescript:
+    path: "ts-client"
+  vuex:
+    path: "vue/src/store"
+genesis:
+  chain_id: "cosmos:smpl-chain"
+  app_state:
+    staking:
+      params:
+        bond_denom: "garden"
+    crisis:
+      constant_fee:
+        denom: garden
+    mint:
+      minter:
+        inflation: "0.0"
+      params:
+        mint_denom: garden
+        inflation_max: "0.0"
+        inflation_min: "0.0"
+        inflation_rate_change: "0.0"
+    bank:
+      denom_metadata:
+        - description: "Stable token"
+          name: "usdst"
+          symbol: "usdst"
+          display: "usdst"
+          base: "busdst"
+          denom_units:
+            - denom: "busdst"
+              exponent: 0
+            - denom: "usdst"
+              exponent: 6
+        - description: "Pegged USD token"
+          name: "usdse"
+          symbol: "usdse"
+          display: "usdse"
+          base: "busdse"
+          denom_units: 
+             - denom: "busdse"
+               exponent: 0
+             - denom: "usdse"
+               exponent: 6
+        - description: "SMPL token"
+          name: "SMPL"
+          symbol: "smpl"
+          display: "smpl"
+          base: "garden"
+          denom_units:
+            - denom: "garden"
+              exponent: 0
+              aliases:
+                - "bsmpl"
+            - denom: "usmpl"
+              exponent: 3
+            - denom: "msmpl"
+              exponent: 6
+            - denom: "smpl"
+              exponent: 9
+    roles:
+      adminaccount: "smpl1q28v96p6lhyac2ghjlyylsl4290tl722x9kmtg"
+faucet:
+  name: alice
+  coins:
+    - 1000smpl
+  coins_max:
+    - 20000smpl
+init:
+  home: ~/.Billy
+  app:
+    minimum_gas_prices: "0garden,0usdse,0usdst"
+    grpc-web:
+      enable_unsafe_cors: false
+    api:
+      enabled_unsafe_cors: false
+    rpc:
+      cors-allowed-origins:
+  client:
+    keyring-backend: test
+    chain-id: "cosmos:smpl-chain"
+  config:
+    consensus:
+      create_empty_blocks: false
+    rpc:
+      cors-allowed-origins: []
