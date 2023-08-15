@@ -1,49 +1,75 @@
 version: 1
 accounts:
-  - name: validator1
-    coins: [ "200000000000000000garden" ]
-    mnemonic: "blossom nominee burst use banana base kite strong lawn autumn tree enact vapor domain media you marble bomb theory heart visit give cereal panic"
-  - name: alice
-    coins: [ "200000000000000garden" ]
-    mnemonic: "primary off palace rhythm attend human sample exact side domain fantasy attend tent end shadow gallery okay gallery clog announce cry senior citizen spot"
-  - name: bob
-    coins: ["10000000000000garden"]
-    mnemonic: "lion fade special man proof bus mansion turn consider earth castle comfort echo axis body pen vehicle glare pig chest member fantasy brush kiwi"
-validators:
-  - name: validator1
-    bonded: "10000000000000000garden"
-    app:
-      minimum-gas-prices: "10garden,10busdse"
-      grpc-web:
-        enable-unsafe-cors: false
-        enable_unsafe_cors: false
-      api:
-        enabled-unsafe-cors: false
-        enabled_unsafe_cors: false
-      rpc:
-        cors_allowed_origins: []
-    client:
-      keyring-backend: test
-      chain-id: "cosmos:smpl-chain"
-    config:
-      consensus:
-        create_empty_blocks: false
-      rpc:
-        cors_allowed_origins: []
-
+- name: validator1
+  coins:
+  - 200000000000000000garden
+  mnemonic: blossom nominee burst use banana base kite strong lawn autumn tree enact
+    vapor domain media you marble bomb theory heart visit give cereal panic
+- name: alice
+  coins:
+  - 200000000000000garden
+  mnemonic: primary off palace rhythm attend human sample exact side domain fantasy
+    attend tent end shadow gallery okay gallery clog announce cry senior citizen spot
+- name: bob
+  coins:
+  - 10000000000000garden
+  mnemonic: lion fade special man proof bus mansion turn consider earth castle comfort
+    echo axis body pen vehicle glare pig chest member fantasy brush kiwi
+faucet:
+  name: alice
+  coins:
+  - 1000smpl
+  coins_max:
+  - 20000smpl
 client:
-  openapi:
-    path: "docs/static/openapi.yml"
   typescript:
-    path: "ts-client"
+    path: ts-client
   vuex:
-    path: "vue/src/store"
+    path: vue/src/store
+  hooks:
+    path: react/src/hooks
+  openapi:
+    path: docs/static/openapi.yml
 genesis:
-  chain_id: "cosmos:smpl-chain"
   app_state:
-    staking:
-      params:
-        bond_denom: "garden"
+    bank:
+      denom_metadata:
+      - base: busdst
+        denom_units:
+        - denom: busdst
+          exponent: 0
+        - denom: usdst
+          exponent: 6
+        description: Stable token
+        display: usdst
+        name: usdst
+        symbol: usdst
+      - base: busdse
+        denom_units:
+        - denom: busdse
+          exponent: 0
+        - denom: usdse
+          exponent: 6
+        description: Pegged USD token
+        display: usdse
+        name: usdse
+        symbol: usdse
+      - base: garden
+        denom_units:
+        - aliases:
+          - bsmpl
+          denom: garden
+          exponent: 0
+        - denom: usmpl
+          exponent: 3
+        - denom: msmpl
+          exponent: 6
+        - denom: smpl
+          exponent: 9
+        description: SMPL token
+        display: smpl
+        name: SMPL
+        symbol: smpl
     crisis:
       constant_fee:
         denom: garden
@@ -51,54 +77,16 @@ genesis:
       minter:
         inflation: "0.0"
       params:
-        mint_denom: garden
         inflation_max: "0.0"
         inflation_min: "0.0"
         inflation_rate_change: "0.0"
-    bank:
-      denom_metadata:
-        - description: "Stable token"
-          name: "smplst"
-          symbol: "smplst"
-          display: "smplst"
-          base: "bsmplst"
-          denom_units:
-            - denom: "bsmplst"
-              exponent: 0
-            - denom: "smplst"
-              exponent: 6
-        - description: "Pegged USD token"
-          name: "usdse"
-          symbol: "usdse"
-          display: "usdse"
-          base: "busdse"
-          denom_units: 
-             - denom: "busdse"
-               exponent: 0
-             - denom: "usdse"
-               exponent: 6
-        - description: "SMPL token"
-          name: "SMPL"
-          symbol: "smpl"
-          display: "smpl"
-          base: "garden"
-          denom_units:
-            - denom: "garden"
-              exponent: 0
-              aliases:
-                - "bsmpl"
-            - denom: "usmpl"
-              exponent: 3
-            - denom: "msmpl"
-              exponent: 6
-            - denom: "smpl"
-              exponent: 9
+        mint_denom: garden
     roles:
-      adminaccount: "smpl1q28v96p6lhyac2ghjlyylsl4290tl722x9kmtg"
-
-faucet:
-  name: alice
-  coins:
-    - 1000smpl
-  coins_max:
-    - 20000smpl
+      adminaccount: smpl1q28v96p6lhyac2ghjlyylsl4290tl722x9kmtg
+    staking:
+      params:
+        bond_denom: garden
+  chain_id: cosmos:smpl-chain
+validators:
+- name: validator1
+  bonded: 10000000000000000garden
