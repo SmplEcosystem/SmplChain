@@ -47,7 +47,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/capability"
 	capabilitykeeper "github.com/cosmos/cosmos-sdk/x/capability/keeper"
 	capabilitytypes "github.com/cosmos/cosmos-sdk/x/capability/types"
-	consensustypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
 	"github.com/cosmos/cosmos-sdk/x/crisis"
 	crisiskeeper "github.com/cosmos/cosmos-sdk/x/crisis/keeper"
 	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
@@ -676,7 +675,6 @@ func New(
 		rolesmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
-	logger.Info("info")
 
 	app.mm.SetOrderEndBlockers(
 		crisistypes.ModuleName,
@@ -748,6 +746,8 @@ func New(
 
 	app.configurator = module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
 	app.mm.RegisterServices(app.configurator)
+
+	app.RegisterUpgradeHandlers()
 
 	autocliv1.RegisterQueryServer(app.GRPCQueryRouter(), runtimeservices.NewAutoCLIQueryService(app.mm.Modules))
 	reflectionSvc, err := runtimeservices.NewReflectionService()
@@ -831,8 +831,6 @@ func New(
 	app.ScopedIBCKeeper = scopedIBCKeeper
 	app.ScopedTransferKeeper = scopedTransferKeeper
 	// this line is used by starport scaffolding # stargate/app/beforeInitReturn
-
-	app.initUpgradeKeeper()
 
 	return app
 }
@@ -1014,36 +1012,6 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 // SimulationManager implements the SimulationApp interface
 func (app *App) SimulationManager() *module.SimulationManager {
 	return app.sm
-}
-
-func (app *App) initUpgradeKeeper() {
-
-	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
-	app.Logger().Info("hellos")
-
-	if err != nil {
-		panic(err)
-	}
-
-	if upgradeInfo.Name == "test1" && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
-		storeUpgrades := storetypes.StoreUpgrades{
-			// add store upgrades for new modules
-			// Example:
-			Added: []string{crisistypes.ModuleName, consensustypes.ModuleName},
-			// ...
-		}
-
-		// configure store loader that checks if version == upgradeHeight and applies store upgrades
-		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storeUpgrades))
-	}
-
-	app.UpgradeKeeper.SetUpgradeHandler(
-		"test1",
-		func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
-			// Run the necessary migrations for each module
-			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
-		},
-	)
 }
 
 func getTxPriority(fee sdk.Coins, gas int64) int64 {
