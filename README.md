@@ -13,18 +13,6 @@ ignite chain serve
 
 Your blockchain in development can be configured with `config.yml`. To learn more, see the [Ignite CLI docs](https://docs.ignite.com).
 
-### Web Frontend
-
-Ignite CLI has scaffolded a Vue.js-based web app in the `vue` directory. Run the following commands to install dependencies and start the app:
-
-```
-cd vue
-npm install
-npm run serve
-```
-
-The frontend app is built using the `@starport/vue` and `@starport/vuex` packages. For details, see the [monorepo for Ignite front-end development](https://github.com/ignite/web).
-
 ## Release
 To release a new version of your blockchain, create and push a new tag with `v` prefix. A new draft release with the configured targets will be created.
 
@@ -44,9 +32,10 @@ curl https://get.ignite.com/username/SmplChain@latest! | sudo bash
 `username/SmplChain` should match the `username` and `repo_name` of the Github repository to which the source code was pushed. Learn more about [the install process](https://github.com/allinbits/starport-installer).
 
 ### Helpful commands:
-```SmplChaind tx roles add bank smpl1q28v96p6lhyac2ghjlyylsl4290tl722x9kmtg --from alice```
-```SmplChaind tx smplusdse mint 10000 --from alice```
-```SmplChaind tx bank send smpl1q28v96p6lhyac2ghjlyylsl4290tl722x9kmtg smpl1amjrtwxjtngwgsfun6xgmr9ut8v4v9dh6c0nsd 10usdse```
+```SmplChaind tx roles add bank smpl1q28v96p6lhyac2ghjlyylsl4290tl722x9kmtg --from alice --yes```
+```SmplChaind tx smplusdse mint 100000000 --from alice --yes```
+```SmplChaind tx bank send smpl1q28v96p6lhyac2ghjlyylsl4290tl722x9kmtg $WALLET_ADDRESS 10000000busdse --yes```
+
 
 ## Learn more
 

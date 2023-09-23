@@ -1,26 +1,26 @@
 version: 1
 accounts:
-- name: validator1
-  coins:
-  - 200000000000000000garden
-  mnemonic: blossom nominee burst use banana base kite strong lawn autumn tree enact
-    vapor domain media you marble bomb theory heart visit give cereal panic
-- name: alice
-  coins:
-  - 200000000000000garden
-  mnemonic: primary off palace rhythm attend human sample exact side domain fantasy
-    attend tent end shadow gallery okay gallery clog announce cry senior citizen spot
-- name: bob
-  coins:
-  - 10000000000000garden
-  mnemonic: lion fade special man proof bus mansion turn consider earth castle comfort
-    echo axis body pen vehicle glare pig chest member fantasy brush kiwi
+  - name: validator1
+    coins:
+      - 200000000000000000garden
+    mnemonic: blossom nominee burst use banana base kite strong lawn autumn tree enact
+      vapor domain media you marble bomb theory heart visit give cereal panic
+  - name: alice
+    coins:
+      - 200000000000000garden
+    mnemonic: primary off palace rhythm attend human sample exact side domain fantasy
+      attend tent end shadow gallery okay gallery clog announce cry senior citizen spot
+  - name: bob
+    coins:
+      - 10000000000000garden
+    mnemonic: lion fade special man proof bus mansion turn consider earth castle comfort
+      echo axis body pen vehicle glare pig chest member fantasy brush kiwi
 faucet:
   name: alice
   coins:
-  - 1000smpl
+    - 1000smpl
   coins_max:
-  - 20000smpl
+    - 20000smpl
 client:
   typescript:
     path: ts-client
@@ -34,42 +34,42 @@ genesis:
   app_state:
     bank:
       denom_metadata:
-      - base: busdst
-        denom_units:
-        - denom: busdst
-          exponent: 0
-        - denom: usdst
-          exponent: 6
-        description: Stable token
-        display: usdst
-        name: usdst
-        symbol: usdst
-      - base: busdse
-        denom_units:
-        - denom: busdse
-          exponent: 0
-        - denom: usdse
-          exponent: 6
-        description: Pegged USD token
-        display: usdse
-        name: usdse
-        symbol: usdse
-      - base: garden
-        denom_units:
-        - aliases:
-          - bsmpl
-          denom: garden
-          exponent: 0
-        - denom: usmpl
-          exponent: 3
-        - denom: msmpl
-          exponent: 6
-        - denom: smpl
-          exponent: 9
-        description: SMPL token
-        display: smpl
-        name: SMPL
-        symbol: smpl
+        - base: busdst
+          denom_units:
+            - denom: busdst
+              exponent: 0
+            - denom: usdst
+              exponent: 6
+          description: Stable token
+          display: usdst
+          name: usdst
+          symbol: usdst
+        - base: busdse
+          denom_units:
+            - denom: busdse
+              exponent: 0
+            - denom: usdse
+              exponent: 6
+          description: Pegged USD token
+          display: usdse
+          name: usdse
+          symbol: usdse
+        - base: garden
+          denom_units:
+            - aliases:
+                - bsmpl
+              denom: garden
+              exponent: 0
+            - denom: usmpl
+              exponent: 3
+            - denom: msmpl
+              exponent: 6
+            - denom: smpl
+              exponent: 9
+          description: SMPL token
+          display: smpl
+          name: SMPL
+          symbol: smpl
     crisis:
       constant_fee:
         denom: garden
@@ -88,5 +88,17 @@ genesis:
         bond_denom: garden
   chain_id: cosmos:smpl-chain
 validators:
-- name: validator1
-  bonded: 10000000000000000garden
+  - name: validator1
+    bonded: 10000000000000000garden
+    config:
+      moniker: "my-chain"
+      rpc:
+        cors_allowed_origins: [ ]
+    app:
+      api:
+        enabled-unsafe-cors: false
+      grpc-web:
+        enable-unsafe-cors: false
+      rpc:
+        cors_allowed_origins: [ ]
+      minimum-gas-prices: 0smpl

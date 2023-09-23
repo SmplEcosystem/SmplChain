@@ -1,4 +1,4 @@
-FROM golang:1.18-bullseye as build
+FROM golang:1.20-bullseye as build
 
 RUN apt-get update && \
     apt-get upgrade -y && \

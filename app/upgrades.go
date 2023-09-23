@@ -1,6 +1,9 @@
 package app
 
 import (
+	rolestypes "SmplChain/x/roles/types"
+	smplchaintypes "SmplChain/x/smplchain/types"
+	smplusdsetypes "SmplChain/x/smplusdse/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -17,7 +20,6 @@ import (
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
-	"slices"
 )
 
 // UpgradeName defines the on-chain upgrade name for the sample SimApp upgrade
@@ -51,11 +53,17 @@ func (app *App) RegisterUpgradeHandlers() {
 			keyTable = govv1.ParamKeyTable() //nolint:staticcheck
 		case crisistypes.ModuleName:
 			keyTable = crisistypes.ParamKeyTable() //nolint:staticcheck
+		case smplchaintypes.ModuleName:
+			keyTable = smplchaintypes.ParamKeyTable()
+		case rolestypes.ModuleName:
+			keyTable = rolestypes.ParamKeyTable()
+		case smplusdsetypes.ModuleName:
+			keyTable = smplusdsetypes.ParamKeyTable()
 		}
 
-		statelessModules := []string{"smplusdse", "roles", "smplchain"}
+		//statelessModules := []string{"smplusdse", "roles", "smplchain"}
 
-		if !subspace.HasKeyTable() && !slices.Contains(statelessModules, subspace.Name()) {
+		if !subspace.HasKeyTable() {
 			app.Logger().Info("keyTable", "keytable", keyTable, "subspace", subspace, "subpace.name", subspace.Name())
 			subspace.WithKeyTable(keyTable)
 		}
